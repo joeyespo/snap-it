@@ -1,0 +1,28 @@
+ToDo - SnapIt
+====================
+ 
+ * Rename from CamMon to SnapIt
+ * Rename auto-save to snapshot
+ * Show how many pictures were taken
+ - Add a counter to show when next picture will be taken
+   - Show time next picture will be taken
+ - Show what time snapshots began
+ * Show time when last shot was taken (and what it was ??)
+ - Create an image viewer (auto-loads the times ??)
+   - Create a link to open the image folder
+ * Add a 'Take Snapshot' button
+ - Better error detection/correction (keep running)
+ - Merge DShowNET into the project
+ - Make a Dll (or thread only?) for error capture and starting/stopping feature
+ - Make input device stoppable/restartable
+ - Start[/stop] snapshot schedule
+ - Dont die when cannot start camera
+ - Interval definitions --> using math
+   - Make a standard that can be used by other apps like WinEye, etc
+
+
+Options:
+ 
+ - Put counter in tooltip
+ - Filename format
+ - Start snapshots on 'clean interval' (on the hour, min, or sec)

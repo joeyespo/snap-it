@@ -14,15 +14,12 @@ using System.Diagnostics;
 
 using Uberware.Tools;
 
-using DShowNET;
-using DShowNET.Device;
-
 
 namespace SnapIt
 {
 
   /// <summary> Summary description for frmMain. </summary>
-  public class frmMain : System.Windows.Forms.Form, ISampleGrabberCB
+  public class frmMain : System.Windows.Forms.Form
   {
     
     #region Class Variables
@@ -38,7 +35,6 @@ namespace SnapIt
 
     private System.Windows.Forms.PictureBox picPreview;
     private System.Windows.Forms.Button btnGrab;
-    private System.Windows.Forms.Button btnTuner;
     private System.Windows.Forms.Label lblDevicePreview;
     private System.Windows.Forms.Button btnSave;
     private System.Windows.Forms.TextBox txtPath;
@@ -50,7 +46,6 @@ namespace SnapIt
     private System.Windows.Forms.ContextMenu menuTray;
     private System.Windows.Forms.MenuItem menuTrayShow;
     private System.Windows.Forms.MenuItem menuTrayExit;
-    private System.Windows.Forms.PictureBox pictureBox1;
     private System.Windows.Forms.Label lblTitle;
     private System.Windows.Forms.Label lblAuthor;
     private System.Windows.Forms.CheckBox chkActive;
@@ -63,7 +58,6 @@ namespace SnapIt
     private System.Windows.Forms.Button btnTakeShot;
     private System.Windows.Forms.PictureBox picSnapshot;
     private System.Windows.Forms.Label lblSnapshot;
-    private System.Windows.Forms.CheckBox chkDialate;
     private System.Windows.Forms.Label lblLastTaken;
     private System.Windows.Forms.TextBox txtLastTaken;
     private System.Windows.Forms.LinkLabel lnkOpenFolder;
@@ -71,6 +65,11 @@ namespace SnapIt
     private System.Windows.Forms.LinkLabel lnkCamError;
     private System.Windows.Forms.Label lblCamError;
     private System.Windows.Forms.Label lblCamErrorTitle;
+    private System.Windows.Forms.TextBox txtPreviewRate;
+    private System.Windows.Forms.Label lblPreviewRate;
+    private System.Windows.Forms.Button btnSettings;
+    private System.Windows.Forms.Label lblPreviewRateMS;
+    private System.Windows.Forms.PictureBox picLogo;
     private System.ComponentModel.IContainer components;
     
     #endregion
@@ -88,10 +87,8 @@ namespace SnapIt
     /// <summary> Clean up any resources being used. </summary>
     protected override void Dispose( bool disposing )
     {
-      if( disposing )
+      if (disposing)
       {
-        CloseInterfaces();
-      
         if (components != null) 
         {
           components.Dispose();
@@ -111,7 +108,7 @@ namespace SnapIt
     {
       this.components = new System.ComponentModel.Container();
       System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmMain));
-      this.btnTuner = new System.Windows.Forms.Button();
+      this.btnSettings = new System.Windows.Forms.Button();
       this.picSnapshot = new System.Windows.Forms.PictureBox();
       this.picPreview = new System.Windows.Forms.PictureBox();
       this.btnGrab = new System.Windows.Forms.Button();
@@ -129,7 +126,7 @@ namespace SnapIt
       this.menuTrayShow = new System.Windows.Forms.MenuItem();
       this.menuTrayExit = new System.Windows.Forms.MenuItem();
       this.btnHide = new System.Windows.Forms.Button();
-      this.pictureBox1 = new System.Windows.Forms.PictureBox();
+      this.picLogo = new System.Windows.Forms.PictureBox();
       this.lblTitle = new System.Windows.Forms.Label();
       this.lblAuthor = new System.Windows.Forms.Label();
       this.chkPreview = new System.Windows.Forms.CheckBox();
@@ -141,24 +138,25 @@ namespace SnapIt
       this.txtCount = new System.Windows.Forms.TextBox();
       this.lblCount = new System.Windows.Forms.Label();
       this.txtLastTaken = new System.Windows.Forms.TextBox();
-      this.chkDialate = new System.Windows.Forms.CheckBox();
       this.btnAbout = new System.Windows.Forms.Button();
       this.lnkCamError = new System.Windows.Forms.LinkLabel();
       this.lblCamError = new System.Windows.Forms.Label();
       this.lblCamErrorTitle = new System.Windows.Forms.Label();
+      this.txtPreviewRate = new System.Windows.Forms.TextBox();
+      this.lblPreviewRate = new System.Windows.Forms.Label();
+      this.lblPreviewRateMS = new System.Windows.Forms.Label();
       ((System.ComponentModel.ISupportInitialize)(this.numFreq)).BeginInit();
       this.grpSnapshots.SuspendLayout();
       this.SuspendLayout();
       // 
-      // btnTuner
+      // btnSettings
       // 
-      this.btnTuner.Enabled = false;
-      this.btnTuner.Location = new System.Drawing.Point(8, 320);
-      this.btnTuner.Name = "btnTuner";
-      this.btnTuner.Size = new System.Drawing.Size(84, 32);
-      this.btnTuner.TabIndex = 3;
-      this.btnTuner.Text = "&Tuner";
-      this.btnTuner.Click += new System.EventHandler(this.btnTuner_Click);
+      this.btnSettings.Location = new System.Drawing.Point(8, 320);
+      this.btnSettings.Name = "btnSettings";
+      this.btnSettings.Size = new System.Drawing.Size(80, 32);
+      this.btnSettings.TabIndex = 3;
+      this.btnSettings.Text = "&Settings...";
+      this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
       // 
       // picSnapshot
       // 
@@ -181,16 +179,15 @@ namespace SnapIt
       this.picPreview.Location = new System.Drawing.Point(8, 72);
       this.picPreview.Name = "picPreview";
       this.picPreview.Size = new System.Drawing.Size(322, 242);
-      this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+      this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
       this.picPreview.TabIndex = 0;
       this.picPreview.TabStop = false;
-      this.picPreview.Resize += new System.EventHandler(this.picPreview_Resize);
       // 
       // btnGrab
       // 
-      this.btnGrab.Location = new System.Drawing.Point(100, 320);
+      this.btnGrab.Location = new System.Drawing.Point(96, 320);
       this.btnGrab.Name = "btnGrab";
-      this.btnGrab.Size = new System.Drawing.Size(96, 32);
+      this.btnGrab.Size = new System.Drawing.Size(80, 32);
       this.btnGrab.TabIndex = 4;
       this.btnGrab.Text = "&Grab";
       this.btnGrab.Click += new System.EventHandler(this.btnGrab_Click);
@@ -219,7 +216,7 @@ namespace SnapIt
       this.txtPath.Name = "txtPath";
       this.txtPath.Size = new System.Drawing.Size(500, 20);
       this.txtPath.TabIndex = 8;
-      this.txtPath.Text = "Captured";
+      this.txtPath.Text = "SnapIt Snapshots";
       this.txtPath.Leave += new System.EventHandler(this.txtPath_Leave);
       // 
       // lblFreq
@@ -324,15 +321,15 @@ namespace SnapIt
       this.btnHide.Text = "&Hide";
       this.btnHide.Click += new System.EventHandler(this.btnHide_Click);
       // 
-      // pictureBox1
+      // picLogo
       // 
-      this.pictureBox1.Image = ((System.Drawing.Bitmap)(resources.GetObject("pictureBox1.Image")));
-      this.pictureBox1.Location = new System.Drawing.Point(8, 8);
-      this.pictureBox1.Name = "pictureBox1";
-      this.pictureBox1.Size = new System.Drawing.Size(32, 32);
-      this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-      this.pictureBox1.TabIndex = 12;
-      this.pictureBox1.TabStop = false;
+      this.picLogo.Image = ((System.Drawing.Bitmap)(resources.GetObject("picLogo.Image")));
+      this.picLogo.Location = new System.Drawing.Point(8, 8);
+      this.picLogo.Name = "picLogo";
+      this.picLogo.Size = new System.Drawing.Size(32, 32);
+      this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+      this.picLogo.TabIndex = 12;
+      this.picLogo.TabStop = false;
       // 
       // lblTitle
       // 
@@ -354,9 +351,9 @@ namespace SnapIt
       // 
       this.chkPreview.Checked = true;
       this.chkPreview.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.chkPreview.Location = new System.Drawing.Point(204, 320);
+      this.chkPreview.Location = new System.Drawing.Point(188, 320);
       this.chkPreview.Name = "chkPreview";
-      this.chkPreview.Size = new System.Drawing.Size(124, 16);
+      this.chkPreview.Size = new System.Drawing.Size(142, 16);
       this.chkPreview.TabIndex = 14;
       this.chkPreview.Text = "Preview";
       this.chkPreview.CheckedChanged += new System.EventHandler(this.chkPreview_CheckedChanged);
@@ -385,7 +382,7 @@ namespace SnapIt
                                                                                this.numFreq,
                                                                                this.lblSnapshotPath,
                                                                                this.txtLastTaken});
-      this.grpSnapshots.Location = new System.Drawing.Point(8, 364);
+      this.grpSnapshots.Location = new System.Drawing.Point(8, 368);
       this.grpSnapshots.Name = "grpSnapshots";
       this.grpSnapshots.Size = new System.Drawing.Size(652, 108);
       this.grpSnapshots.TabIndex = 15;
@@ -457,16 +454,6 @@ namespace SnapIt
       this.txtLastTaken.Text = "(None)";
       this.txtLastTaken.WordWrap = false;
       // 
-      // chkDialate
-      // 
-      this.chkDialate.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-        | System.Windows.Forms.AnchorStyles.Right);
-      this.chkDialate.Location = new System.Drawing.Point(432, 320);
-      this.chkDialate.Name = "chkDialate";
-      this.chkDialate.Size = new System.Drawing.Size(228, 16);
-      this.chkDialate.TabIndex = 16;
-      this.chkDialate.Text = "Dialate to standard size (320, 240)";
-      // 
       // btnAbout
       // 
       this.btnAbout.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
@@ -482,9 +469,9 @@ namespace SnapIt
       this.lnkCamError.ActiveLinkColor = System.Drawing.Color.FromArgb(((System.Byte)(192)), ((System.Byte)(0)), ((System.Byte)(0)));
       this.lnkCamError.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(64)), ((System.Byte)(0)), ((System.Byte)(0)));
       this.lnkCamError.LinkColor = System.Drawing.Color.FromArgb(((System.Byte)(255)), ((System.Byte)(255)), ((System.Byte)(192)));
-      this.lnkCamError.Location = new System.Drawing.Point(16, 228);
+      this.lnkCamError.Location = new System.Drawing.Point(16, 240);
       this.lnkCamError.Name = "lnkCamError";
-      this.lnkCamError.Size = new System.Drawing.Size(306, 78);
+      this.lnkCamError.Size = new System.Drawing.Size(306, 64);
       this.lnkCamError.TabIndex = 17;
       this.lnkCamError.TabStop = true;
       this.lnkCamError.Text = "[ Connect to Device ]";
@@ -496,7 +483,7 @@ namespace SnapIt
       // 
       this.lblCamError.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(64)), ((System.Byte)(0)), ((System.Byte)(0)));
       this.lblCamError.ForeColor = System.Drawing.Color.White;
-      this.lblCamError.Location = new System.Drawing.Point(16, 160);
+      this.lblCamError.Location = new System.Drawing.Point(16, 172);
       this.lblCamError.Name = "lblCamError";
       this.lblCamError.Size = new System.Drawing.Size(306, 64);
       this.lblCamError.TabIndex = 18;
@@ -510,36 +497,62 @@ namespace SnapIt
       this.lblCamErrorTitle.ForeColor = System.Drawing.Color.FromArgb(((System.Byte)(255)), ((System.Byte)(192)), ((System.Byte)(192)));
       this.lblCamErrorTitle.Location = new System.Drawing.Point(16, 80);
       this.lblCamErrorTitle.Name = "lblCamErrorTitle";
-      this.lblCamErrorTitle.Size = new System.Drawing.Size(306, 76);
+      this.lblCamErrorTitle.Size = new System.Drawing.Size(306, 88);
       this.lblCamErrorTitle.TabIndex = 18;
-      this.lblCamErrorTitle.Text = "Could not Connect to Device";
+      this.lblCamErrorTitle.Text = "Error Title";
       this.lblCamErrorTitle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
       this.lblCamErrorTitle.Visible = false;
+      // 
+      // txtPreviewRate
+      // 
+      this.txtPreviewRate.Location = new System.Drawing.Point(272, 336);
+      this.txtPreviewRate.Name = "txtPreviewRate";
+      this.txtPreviewRate.Size = new System.Drawing.Size(36, 20);
+      this.txtPreviewRate.TabIndex = 19;
+      this.txtPreviewRate.Text = "60";
+      // 
+      // lblPreviewRate
+      // 
+      this.lblPreviewRate.Location = new System.Drawing.Point(188, 340);
+      this.lblPreviewRate.Name = "lblPreviewRate";
+      this.lblPreviewRate.Size = new System.Drawing.Size(76, 16);
+      this.lblPreviewRate.TabIndex = 20;
+      this.lblPreviewRate.Text = "Refresh Rate:";
+      // 
+      // lblPreviewRateMS
+      // 
+      this.lblPreviewRateMS.Location = new System.Drawing.Point(312, 340);
+      this.lblPreviewRateMS.Name = "lblPreviewRateMS";
+      this.lblPreviewRateMS.Size = new System.Drawing.Size(20, 16);
+      this.lblPreviewRateMS.TabIndex = 20;
+      this.lblPreviewRateMS.Text = "ms";
       // 
       // frmMain
       // 
       this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-      this.ClientSize = new System.Drawing.Size(668, 478);
+      this.ClientSize = new System.Drawing.Size(668, 485);
       this.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                  this.lblPreviewRate,
+                                                                  this.txtPreviewRate,
                                                                   this.lblCamErrorTitle,
                                                                   this.lblCamError,
                                                                   this.lnkCamError,
-                                                                  this.chkDialate,
                                                                   this.grpSnapshots,
                                                                   this.chkPreview,
                                                                   this.lblTitle,
-                                                                  this.pictureBox1,
+                                                                  this.picLogo,
                                                                   this.btnExit,
                                                                   this.btnSave,
                                                                   this.lblSnapshot,
                                                                   this.lblDevicePreview,
                                                                   this.btnGrab,
                                                                   this.picPreview,
-                                                                  this.btnTuner,
+                                                                  this.btnSettings,
                                                                   this.picSnapshot,
                                                                   this.btnHide,
                                                                   this.lblAuthor,
-                                                                  this.btnAbout});
+                                                                  this.btnAbout,
+                                                                  this.lblPreviewRateMS});
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MinimumSize = new System.Drawing.Size(676, 512);
       this.Name = "frmMain";
@@ -568,10 +581,7 @@ namespace SnapIt
     [STAThread]
     static void Main() 
     {
-      frmMain frm = new frmMain();
-      Application.Run(frm);
-      frm = null; System.GC.Collect();
-      
+      Application.Run(new frmMain());
       Application.Exit();
     }
     
@@ -589,24 +599,21 @@ namespace SnapIt
       if (firstActive) return;
       firstActive = true;
       
+      Application.DoEvents();
       StartCam();
     }
     private void frmMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
+      if (forceClose) return;
+      
+      e.Cancel = true;
       this.Hide();
-      if (forceClose) CloseInterfaces();
-      else e.Cancel = true;
     }
     
     
     
     private void btnGrab_Click(object sender, System.EventArgs e)
     { GrabImage(); }
-    private void btnTuner_Click(object sender, System.EventArgs e)
-    {
-      if (sampGrabber == null) return;
-      if (capGraph != null) DsUtils.ShowTunerPinDialog(capGraph, capFilter, this.Handle);
-    }
     private void btnSave_Click(object sender, System.EventArgs e)
     { SaveImage(); }
 
@@ -654,9 +661,6 @@ namespace SnapIt
       tmrSnapshot.Stop(); tmrSnapshot.Start();
       tmrSnapshot_Tick(sender, new EventArgs());
     }
-
-    private void picPreview_Resize(object sender, System.EventArgs e)
-    { ResizeVideoWindow(); }
     
     private void numFreq_ValueChanged(object sender, System.EventArgs e)
     { tmrSnapshot.Interval = (int)(numFreq.Value * 1000); }
@@ -670,16 +674,9 @@ namespace SnapIt
     { SnapshotImage(); }
     
     private void frmMain_VisibleChanged(object sender, System.EventArgs e)
-    {
-      if (videoWin == null) return;
-      if (!Visible) videoWin.put_Visible(0);
-      else chkPreview_CheckedChanged(sender, new EventArgs());
-    }
+    { UpdateShowPreview(); }
     private void chkPreview_CheckedChanged(object sender, System.EventArgs e)
-    {
-      if (videoWin == null) return;
-      videoWin.put_Visible( (( chkPreview.Checked )?( -1 ):( 0 )) );
-    }
+    { UpdateShowPreview(); }
     
     private void lnkOpenFolder_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
     {
@@ -695,13 +692,20 @@ namespace SnapIt
         catch
         {
           // Failsafe
-          MessageBox.Show(this, "Could not start browser process.", "Czt", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(this, "Could not start browser process.", "SnapIt", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
     }
     
     private void lnkCamError_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
     { StartCam(); }
+    
+    private void btnSettings_Click(object sender, System.EventArgs e)
+    {
+      // !!!!! Create own settings window
+      m_Cam.ShowDlgVideoSource();
+      m_Cam.ShowDlgVideoFormat();
+    }
     
     
     
@@ -711,22 +715,87 @@ namespace SnapIt
     {
       try
       {
-        lnkCamError.Visible = false;
-        lblCamErrorTitle.Visible = false;
+        // Hide error (if any)
         lblCamError.Visible = false;
+        lblCamErrorTitle.Visible = false;
+        lnkCamError.Visible = false;
         picPreview.BackColor = picSnapshot.BackColor;
+        picPreview.Update();
         
+        // Show status
+        lblCamError.BackColor = picPreview.BackColor;
+        lblCamError.Text = "Connecting to Device - Please wait ...";
+        lblCamError.Visible = true;
+        lblCamError.Update();
+        
+        // Get WebCam
         m_Cam = new CamTool(this);
+        
+        // Start preview
+        try
+        { m_Cam.PreviewRate = int.Parse(txtPreviewRate.Text); }
+        catch
+        { m_Cam.PreviewRate = 60; txtPreviewRate.Text = "60"; }
+        UpdateShowPreview();
+        
+        // Hide status
+        lblCamError.Visible = false;
       }
       catch (CamException e)
       {
-        lblCamError.Text  = e.Message + "\n";
-        lblCamError.Text += "Please check the device connection and make sure that the device is not being used by another application or user. Click the link below to try again.";
+        m_Cam = null;
+        lblCamError.Visible = false;
         
-        picPreview.BackColor = lblCamError.BackColor;
+        lblCamErrorTitle.Text = e.Message;
+        lblCamError.Text = "Please check the device connection and make sure that the device is not being used by another application or user. Click the link below to try again.";
+        
+        picPreview.BackColor = lblCamErrorTitle.BackColor;
+        lblCamError.BackColor = picPreview.BackColor;
         lnkCamError.Visible = true;
         lblCamErrorTitle.Visible = true;
         lblCamError.Visible = true;
+      }
+    }
+    
+    private void UpdateShowPreview ()
+    {
+      // Failsafe
+      if (m_Cam == null) return;
+      
+      // Update preview
+      if ((chkPreview.Checked) && (Visible) && (WindowState != FormWindowState.Minimized))
+        m_Cam.SetPreviewCallback(new CamPreviewCallback(UpdatePreview));
+      else
+      {
+        m_Cam.SetPreviewCallback(null);
+        picPreview.Image = null;
+      }
+    }
+    
+    private void UpdatePreview (Image PreviewImage)
+    {
+      picPreview.Image = PreviewImage;
+      
+      if (picPreview.Image == null)
+      {
+        if (lblCamError.Visible == false)
+        {
+          lblCamErrorTitle.Text = "Could not decode image.";
+          lblCamError.Text = "Please check the device settings and make sure that the compression can be decoded.";
+          
+          picPreview.BackColor = lblCamErrorTitle.BackColor;
+          lblCamError.BackColor = picPreview.BackColor;
+          lnkCamError.Visible = false;
+          lblCamErrorTitle.Visible = true;
+          lblCamError.Visible = true;
+        }
+      }
+      else if (lblCamError.Visible)
+      {
+        lblCamError.Visible = false;
+        lblCamErrorTitle.Visible = false;
+        lnkCamError.Visible = false;
+        picPreview.BackColor = picSnapshot.BackColor;
       }
     }
     
@@ -772,7 +841,7 @@ namespace SnapIt
     private string GetImagePath (string path)
     {
       if (!Path.IsPathRooted(path))
-        return Path.Combine(Directory.GetCurrentDirectory(), path);
+        return Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "My Pictures"), path);
       else return Path.Combine(path, "");
     }
     private string GetImageFileName (string path, DateTime time)
@@ -805,7 +874,7 @@ namespace SnapIt
     {
       Image img = new Bitmap(picSnapshot.Image);
       SaveFileDialog sd = new SaveFileDialog();
-      sd.FileName = @"SnapIt.jpg";
+      sd.FileName = "SnapIt.jpg";
       sd.Title = "Save Image as...";
       sd.Filter = "JPEG file (*.jpg)|*.jpg";
       sd.FilterIndex = 1;
@@ -814,478 +883,29 @@ namespace SnapIt
       img = null;
     }
     
-    private void SnapshotImage ()
+    private bool SnapshotImage ()
     {
-      GrabImage();
+      if (!GrabImage()) return false;
       
       DateTime now = DateTime.Now;
       txtLastTaken.Text = now.ToShortDateString() + " " + now.ToLongTimeString();
       
       SaveImage(GetImageFileName(txtPath.Text, now));
       cSnapshots++; txtCount.Text = cSnapshots.ToString();
-    }
-    
-    private void GrabImage ()
-    {
-      if (sampGrabber == null) return;
-      if (videoInfoHeader == null) return;
-      
-      if (savedArray == null)
-      {
-        int size = videoInfoHeader.BmiHeader.ImageSize;
-        if ((size < 1000) || (size > 16000000)) return;
-        savedArray = new byte[ size + 64000 ];
-      }
-
-      btnSave.Enabled = false;
-      Image old = picSnapshot.Image;
-      picSnapshot.Image = null;
-      if( old != null )
-      { old.Dispose(); }
-      System.GC.Collect();
-      btnGrab.Enabled = false;
-      captured = false; captureDone = false;
-      sampGrabber.SetCallback( this, 1 );
-      
-      while (captureDone == false) Application.DoEvents();
-    }
-    
-    #endregion
-    
-    #region Capture Device Functions
-    
-    bool StartupCapture ()
-    {
-      if( ! DsUtils.IsCorrectDirectXVersion() )
-      {
-        MessageBox.Show( this, "DirectX 8.1 NOT installed!", "DirectShow.NET", MessageBoxButtons.OK, MessageBoxIcon.Stop );
-        return false;
-      }
-
-      if( ! DsDev.GetDevicesOfCat( FilterCategory.VideoInputDevice, out capDevices ) )
-      {
-        MessageBox.Show( this, "No video capture devices found!", "DirectShow.NET", MessageBoxButtons.OK, MessageBoxIcon.Stop );
-        return false;
-      }
-
-      DsDevice dev = null;
-      if( capDevices.Count == 1 )
-        dev = capDevices[0] as DsDevice;
-      else
-      {
-        DeviceSelector selector = new DeviceSelector( capDevices );
-        selector.ShowDialog( this );
-        dev = selector.SelectedDevice;
-      }
-
-      if (dev == null)
-        return false;
-
-      if (!StartupVideo(dev.Mon))
-        return false;
-      
       return true;
     }
     
-    /// <summary> capture event, triggered by buffer callback. </summary>
-    void OnCaptureDone()
+    private bool GrabImage ()
     {
-      try 
-      {
-        btnGrab.Enabled = true;
-        int hr;
-        if( sampGrabber == null )
-          return;
-        hr = sampGrabber.SetCallback( null, 0 );
-
-        int w = videoInfoHeader.BmiHeader.Width;
-        int h = videoInfoHeader.BmiHeader.Height;
-        if( ((w & 0x03) != 0) || (w < 32) || (w > 4096) || (h < 32) || (h > 4096) )
-          return;
-        int stride = w * 3;
-
-        GCHandle handle = GCHandle.Alloc( savedArray, GCHandleType.Pinned );
-        int scan0 = (int) handle.AddrOfPinnedObject();
-        scan0 += (h - 1) * stride;
-        Bitmap b = new Bitmap( w, h, -stride, PixelFormat.Format24bppRgb, (IntPtr) scan0 );
-        handle.Free();
-        savedArray = null;
-        Image old = picSnapshot.Image;
-        picSnapshot.Image = (( chkDialate.Checked )?( new Bitmap(b, 320, 240) ):( b ));
-        if( old != null )
-        { old.Dispose(); }
-        System.GC.Collect();
-        btnSave.Enabled = true;
-        captureDone = true;
-      }
-      catch( Exception ee )
-      {
-        MessageBox.Show( this, "Could not grab picture\r\n" + ee.Message, "DirectShow.NET", MessageBoxButtons.OK, MessageBoxIcon.Stop );
-      }
-    }
-
-    /// <summary> start all the interfaces, graphs and preview window. </summary>
-    bool StartupVideo( UCOMIMoniker mon )
-    {
-      int hr;
-      try 
-      {
-        if( ! CreateCaptureDevice( mon ) )
-          return false;
-
-        if( ! GetInterfaces() )
-          return false;
-
-        if( ! SetupGraph() )
-          return false;
-
-        if( ! SetupVideoWindow() )
-          return false;
-
-      #if DEBUG
-        DsROT.AddGraphToRot( graphBuilder, out rotCookie );    // graphBuilder capGraph
-      #endif
+      if (m_Cam == null) return false;
       
-        hr = mediaCtrl.Run();
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        bool hasTuner = DsUtils.ShowTunerPinDialog( capGraph, capFilter, this.Handle );
-        btnTuner.Enabled = hasTuner;
-
-        return true;
-      }
-      catch( Exception ee )
-      {
-        MessageBox.Show( this, "Could not start video stream\r\n" + ee.Message, "DirectShow.NET", MessageBoxButtons.OK, MessageBoxIcon.Stop );
-        return false;
-      }
+      picSnapshot.Image = m_Cam.GrabFrame();
+      btnSave.Enabled = (picSnapshot.Image != null);
+      return true;
     }
-
-    /// <summary> make the video preview window to show in videoPanel. </summary>
-    bool SetupVideoWindow()
-    {
-      int hr;
-      try 
-      {
-        // Set the video window to be a child of the main window
-        hr = videoWin.put_Owner( picPreview.Handle );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        // Set video window style
-        hr = videoWin.put_WindowStyle( WS_CHILD | WS_CLIPCHILDREN );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        // Use helper function to position video window in client rect of owner window
-        ResizeVideoWindow();
-
-        // Make the video window visible, now that it is properly positioned
-        hr = videoWin.put_Visible( DsHlp.OATRUE );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        hr = mediaEvt.SetNotifyWindow( this.Handle, WM_GRAPHNOTIFY, IntPtr.Zero );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-        return true;
-      }
-      catch( Exception ee )
-      {
-        MessageBox.Show( this, "Could not setup video window\r\n" + ee.Message, "DirectShow.NET", MessageBoxButtons.OK, MessageBoxIcon.Stop );
-        return false;
-      }
-    }
-
-
-    /// <summary> build the capture graph for grabber. </summary>
-    bool SetupGraph()
-    {
-      int hr;
-      try 
-      {
-        hr = capGraph.SetFiltergraph( graphBuilder );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        hr = graphBuilder.AddFilter( capFilter, "Ds.NET Video Capture Device" );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        if (!DsUtils.ShowCapPinDialog(capGraph, capFilter, this.Handle))
-          return false;
-
-        AMMediaType media = new AMMediaType();
-        media.majorType  = MediaType.Video;
-        media.subType  = MediaSubType.RGB24;
-        media.formatType = FormatType.VideoInfo;    // ???
-        hr = sampGrabber.SetMediaType( media );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        hr = graphBuilder.AddFilter( baseGrabFlt, "Ds.NET Grabber" );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        Guid cat = PinCategory.Preview;
-        Guid med = MediaType.Video;
-        hr = capGraph.RenderStream( ref cat, ref med, capFilter, null, null ); // baseGrabFlt 
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        cat = PinCategory.Capture;
-        med = MediaType.Video;
-        hr = capGraph.RenderStream( ref cat, ref med, capFilter, null, baseGrabFlt ); // baseGrabFlt 
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        media = new AMMediaType();
-        hr = sampGrabber.GetConnectedMediaType( media );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-        if( (media.formatType != FormatType.VideoInfo) || (media.formatPtr == IntPtr.Zero) )
-          throw new NotSupportedException( "Unknown Grabber Media Format" );
-
-        videoInfoHeader = (VideoInfoHeader) Marshal.PtrToStructure( media.formatPtr, typeof(VideoInfoHeader) );
-        Marshal.FreeCoTaskMem( media.formatPtr ); media.formatPtr = IntPtr.Zero;
-
-        hr = sampGrabber.SetBufferSamples( false );
-        if( hr == 0 )
-          hr = sampGrabber.SetOneShot( false );
-        if( hr == 0 )
-          hr = sampGrabber.SetCallback( null, 0 );
-        if( hr < 0 )
-          Marshal.ThrowExceptionForHR( hr );
-
-        return true;
-      }
-      catch( Exception ee )
-      {
-        MessageBox.Show( this, "Could not setup graph\r\n" + ee.Message, "DirectShow.NET", MessageBoxButtons.OK, MessageBoxIcon.Stop );
-        return false;
-      }
-    }
-
-
-    /// <summary> create the used COM components and get the interfaces. </summary>
-    bool GetInterfaces()
-    {
-      Type comType = null;
-      object comObj = null;
-      try 
-      {
-        comType = Type.GetTypeFromCLSID( Clsid.FilterGraph );
-        if( comType == null )
-          throw new NotImplementedException( @"DirectShow FilterGraph not installed/registered!" );
-        comObj = Activator.CreateInstance( comType );
-        graphBuilder = (IGraphBuilder) comObj; comObj = null;
-
-        Guid clsid = Clsid.CaptureGraphBuilder2;
-        Guid riid = typeof(ICaptureGraphBuilder2).GUID;
-        comObj = DsBugWO.CreateDsInstance( ref clsid, ref riid );
-        capGraph = (ICaptureGraphBuilder2) comObj; comObj = null;
-
-        comType = Type.GetTypeFromCLSID( Clsid.SampleGrabber );
-        if( comType == null )
-          throw new NotImplementedException( @"DirectShow SampleGrabber not installed/registered!" );
-        comObj = Activator.CreateInstance( comType );
-        sampGrabber = (ISampleGrabber) comObj; comObj = null;
-
-        mediaCtrl  = (IMediaControl)  graphBuilder;
-        videoWin  = (IVideoWindow)  graphBuilder;
-        mediaEvt  = (IMediaEventEx)  graphBuilder;
-        baseGrabFlt  = (IBaseFilter)    sampGrabber;
-        return true;
-      }
-      catch( Exception ee )
-      {
-        MessageBox.Show( this, "Could not get interfaces\r\n" + ee.Message, "DirectShow.NET", MessageBoxButtons.OK, MessageBoxIcon.Stop );
-        return false;
-      }
-      finally
-      {
-        if( comObj != null )
-          Marshal.ReleaseComObject( comObj ); comObj = null;
-      }
-    }
-
-    /// <summary> create the user selected capture device. </summary>
-    bool CreateCaptureDevice( UCOMIMoniker mon )
-    {
-      object capObj = null;
-      try 
-      {
-        Guid gbf = typeof( IBaseFilter ).GUID;
-        mon.BindToObject( null, null, ref gbf, out capObj );
-        capFilter = (IBaseFilter) capObj; capObj = null;
-        return true;
-      }
-      catch( Exception ee )
-      {
-        MessageBox.Show( this, "Could not create capture device\r\n" + ee.Message, "DirectShow.NET", MessageBoxButtons.OK, MessageBoxIcon.Stop );
-        return false;
-      }
-      finally
-      {
-        if( capObj != null )
-          Marshal.ReleaseComObject( capObj ); capObj = null;
-      }
-
-    }
-
-    /// <summary> do cleanup and release DirectShow. </summary>
-    void CloseInterfaces()
-    {
-      int hr;
-      try 
-      {
-      #if DEBUG
-        if( rotCookie != 0 )
-          DsROT.RemoveGraphFromRot( ref rotCookie );
-      #endif
-
-        if( mediaCtrl != null )
-        {
-          hr = mediaCtrl.Stop();
-          mediaCtrl = null;
-        }
-
-        if( mediaEvt != null )
-        {
-          hr = mediaEvt.SetNotifyWindow( IntPtr.Zero, WM_GRAPHNOTIFY, IntPtr.Zero );
-          mediaEvt = null;
-        }
-
-        if( videoWin != null )
-        {
-          hr = videoWin.put_Visible( DsHlp.OAFALSE );
-          hr = videoWin.put_Owner( IntPtr.Zero );
-          videoWin = null;
-        }
-
-        baseGrabFlt = null;
-        if( sampGrabber != null )
-          Marshal.ReleaseComObject( sampGrabber ); sampGrabber = null;
-
-        if( capGraph != null )
-          Marshal.ReleaseComObject( capGraph ); capGraph = null;
-
-        if( graphBuilder != null )
-          Marshal.ReleaseComObject( graphBuilder ); graphBuilder = null;
-
-        if( capFilter != null )
-          Marshal.ReleaseComObject( capFilter ); capFilter = null;
-      
-        if( capDevices != null )
-        {
-          foreach( DsDevice d in capDevices )
-            d.Dispose();
-          capDevices = null;
-        }
-      }
-      catch( Exception )
-      {}
-    }
-
-    /// <summary> resize preview video window to fill client area. </summary>
-    void ResizeVideoWindow()
-    {
-      if( videoWin != null )
-      {
-        Rectangle rc = picPreview.ClientRectangle;
-        videoWin.SetWindowPosition( 0, 0, rc.Right, rc.Bottom );
-      }
-    }
-
-    /// <summary> override window fn to handle graph events. </summary>
-    protected override void WndProc( ref Message m )
-    {
-      if( m.Msg == WM_GRAPHNOTIFY )
-      {
-        if( mediaEvt != null )
-          OnGraphNotify();
-        return;
-      }
-      base.WndProc( ref m );
-    }
-
-    /// <summary> graph event (WM_GRAPHNOTIFY) handler. </summary>
-    void OnGraphNotify()
-    {
-      DsEvCode  code;
-      int p1, p2, hr = 0;
-      do
-      {
-        hr = mediaEvt.GetEvent( out code, out p1, out p2, 0 );
-        if( hr < 0 )
-          break;
-        hr = mediaEvt.FreeEventParams( code, p1, p2 );
-      }
-      while( hr == 0 );
-    }
-
-    /// <summary> sample callback, NOT USED. </summary>
-    int ISampleGrabberCB.SampleCB( double SampleTime, IMediaSample pSample )
-    { return 0; }
-
-    /// <summary> buffer callback, COULD BE FROM FOREIGN THREAD. </summary>
-    int ISampleGrabberCB.BufferCB( double SampleTime, IntPtr pBuffer, int BufferLen )
-    {
-      if (captured || (savedArray == null))
-        return 0;
-
-      captured = true;
-      bufferedSize = BufferLen;
-      if( (pBuffer != IntPtr.Zero) && (BufferLen > 1000) && (BufferLen <= savedArray.Length) )
-        Marshal.Copy( pBuffer, savedArray, 0, BufferLen );
-      this.BeginInvoke( new CaptureDone( this.OnCaptureDone ) );
-      return 0;
-    }
-
-    #region Capture Device Variables
-    
-    private IBaseFilter capFilter;          // Base filter of the actually used video devices
-    private IGraphBuilder graphBuilder;     // Graph builder interface
-    private ICaptureGraphBuilder2 capGraph; // Capture graph builder interface
-    private ISampleGrabber sampGrabber;     // Sample graph builder interface
-    private IMediaControl mediaCtrl;        // Control interface
-    private IMediaEventEx mediaEvt;         // Event interface
-    private IVideoWindow videoWin;          // Video window interface
-    private IBaseFilter baseGrabFlt;        // Grabber filter interface
-    private byte [] savedArray;             // Buffer for bitmap data
-
-    // Structure describing the bitmap to grab
-    private VideoInfoHeader videoInfoHeader;
-    private bool captured = true;
-    private bool captureDone = false;
-    private int bufferedSize;
-
-    // List of installed video devices.
-    private ArrayList capDevices;
-
-    // Message from graph
-    private const int WM_GRAPHNOTIFY    = 0x00008001;
-
-    // Attributes for video window
-    private const int WS_CHILD          = 0x40000000;
-    private const int WS_CLIPCHILDREN   = 0x02000000;
-    private const int WS_CLIPSIBLINGS   = 0x04000000;
-    
-    // Event when callback has finished (ISampleGrabberCB.BufferCB).
-    private delegate void CaptureDone ();
-
-    #if DEBUG
-    private int    rotCookie = 0;
-    #endif
-    
-    internal enum PlayState
-    { Init, Stopped, Paused, Running }
     
     #endregion
-    
-    #endregion
-    
+
   }
 
 }

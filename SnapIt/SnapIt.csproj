@@ -71,10 +71,6 @@
       <Name>CamTool</Name>
       <HintPath>CamTool.dll</HintPath>
     </Reference>
-    <Reference Include="DShowNET">
-      <Name>DShowNET</Name>
-      <HintPath>DShowNET.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -96,18 +92,12 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DeviceSelector.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <EmbeddedResource Include="DeviceSelector.resx">
-      <DependentUpon>DeviceSelector.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>

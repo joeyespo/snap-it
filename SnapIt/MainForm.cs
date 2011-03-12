@@ -296,6 +296,11 @@ namespace SnapIt
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void btnSettings_Click(object sender, System.EventArgs e)
         {
+            if(m_Cam == null)
+            {
+                MessageBox.Show("Could not connect to device.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             // !!!!! Create own settings window
             m_Cam.ShowDlgVideoSource();
             m_Cam.ShowDlgVideoFormat();
